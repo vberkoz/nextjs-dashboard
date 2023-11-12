@@ -1,6 +1,7 @@
 import Form from '@/app/ui/invoices/edit-form';
 import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 import { fetchInvoiceById, fetchCustomers } from '@/app/lib/data';
+import { InvoiceForm } from '@/app/lib/definitions';
  
 export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
@@ -8,6 +9,17 @@ export default async function Page({ params }: { params: { id: string } }) {
     fetchInvoiceById(id),
     fetchCustomers(),
   ]);
+  
+  let invoiceData: InvoiceForm = {
+    id: '',
+    customer_id: '',
+    amount: 0,
+    status: 'pending'
+  };
+
+  if (invoice) {
+    invoiceData = invoice;
+  }
 
   return (
     <main>
@@ -21,7 +33,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           },
         ]}
       />
-      <Form invoice={invoice} customers={customers} />
+      <Form invoice={invoiceData} customers={customers} />
     </main>
   );
 }
